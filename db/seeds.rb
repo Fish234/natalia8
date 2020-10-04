@@ -5,3 +5,23 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+100.times do
+    User.create(
+        {
+            name: Faker::Movies::HarryPotter.character,
+            avatar_url: Faker::Avatar.image,
+            email: Faker::Internet.email,
+            password: 'pass154063' 
+        }
+    )
+end
+
+150.times do
+    user = rand(1..100)
+    Tweet.create(
+        {
+            content: Faker::Movies::HarryPotter.quote, 
+            user_id: user
+        }
+    )
+end

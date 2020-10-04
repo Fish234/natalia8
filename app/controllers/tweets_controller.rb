@@ -1,12 +1,37 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: :index
 
   # GET /tweets
   # GET /tweets.json
   def index
-    @tweets = Tweet.all
+    @tweets = Tweet.order(created_at: 'desc').page(params[:page]).per(50)
+    @tweet = Tweet.new
   end
 
+  def like
+    if current_user
+      @tweet = Tweet.find(params[:tweet_id])
+      if is_liked?
+        @tweet.remove_link(current_user)
+      else
+        @tweet.add_like(current_user)
+      end
+    else
+      redirect_to new_session_path
+    end
+    redirect_to root_path
+  end
+
+  def retweet
+    if current_user
+      @tweet = Tweet.find(params[:tweet_id])
+      Tweet.create(content: @tweet.content, user_id: current_user.id , origin_tweet: @tweet.id)
+    else
+      redirect_to root_path
+    end
+    redirect_to root_path
+  end
   # GET /tweets/1
   # GET /tweets/1.json
   def show
@@ -25,6 +50,7 @@ class TweetsController < ApplicationController
   # POST /tweets.json
   def create
     @tweet = Tweet.new(tweet_params)
+    @tweet.user_id = current_user.id
 
     respond_to do |format|
       if @tweet.save
@@ -63,12 +89,16 @@ class TweetsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def is_liked?
+      Like.where(user: current_user.id, tweet: params[:tweet_id]).exists?
+    end
+    
     def set_tweet
       @tweet = Tweet.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def tweet_params
-      params.require(:tweet).permit(:content, :user_id)
+      params.require(:tweet).permit(:content, :user_id, :origin_tweet)
     end
 end
