@@ -13,4 +13,7 @@ class Tweet < ApplicationRecord
     def original_tweet
       Tweet.find(self.origin_tweet)
     end
+
+    
+
 end

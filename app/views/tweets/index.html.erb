@@ -23,7 +23,7 @@
         <% end %>
           <%= link_to 'like', tweet_like_path(tweet), method: :post%> <%= tweet.likes.count%>
           <%= link_to 'retweet', tweet_retweet_path(tweet), method: :post%>
-          <%= (Time.now - 10).ago_in_words %%>
+          
         </div>
       </div>
     </div>

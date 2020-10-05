@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :relationships
+  get 'user/index'
+  resources :friends
   resources :tweets do
     post 'like', to:"tweets#like"
     post 'retweet', to:"tweets#retweet"
