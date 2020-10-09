@@ -9,6 +9,11 @@ class TweetsController < ApplicationController
     @tweet = Tweet.new
   end
 
+  
+  #def search
+  #  @tweet =Tweet.where("content LIKE?")
+  #end
+
   def like
     if current_user
       @tweet = Tweet.find(params[:tweet_id])
@@ -32,6 +37,8 @@ class TweetsController < ApplicationController
     end
     redirect_to root_path
   end
+
+
   # GET /tweets/1
   # GET /tweets/1.json
   def show
