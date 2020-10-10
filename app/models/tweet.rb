@@ -1,6 +1,5 @@
 class Tweet < ApplicationRecord
   belongs_to :user
-  belongs_to :friend
   has_many :likes
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings

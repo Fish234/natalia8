@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: :index
+  before_action :authenticate_user!, except: [:index, :search]
 
   # GET /tweets
   # GET /tweets.json
@@ -10,9 +10,9 @@ class TweetsController < ApplicationController
   end
 
   
-  #def search
-  #  @tweet =Tweet.where("content LIKE?")
-  #end
+  def search
+    @tweets =Tweet.where("content LIKE?", "%#{params[:q]}%")
+  end
 
   def like
     if current_user
